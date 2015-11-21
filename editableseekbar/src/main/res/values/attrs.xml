@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="EditableSeekBar">
+        <attr name="esbTitleAppearance" format="reference" />
+        <attr name="esbMax" format="integer" />
+        <attr name="esbValue" format="integer" />
+        <attr name="esbTitle" format="string" />
+        <attr name="esbSelectAllOnFocus" format="boolean" />
+        <attr name="esbAnimateSeekBar" format="boolean" />
+        <attr name="esbEditTextWidth" format="dimension" />
+        <attr name="esbEditTextFontSize" format="dimension" />
+    </declare-styleable>
+</resources>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:padding="8dp">
+
+    <com.gregacucnik.editableseekbar.EditableSeekBar
+        android:id="@+id/esbExample1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:esbTitle="Example 1 with title" />
+
+    <com.gregacucnik.editableseekbar.EditableSeekBar
+        android:id="@+id/esbExample2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:esbTitleAppearance="@style/Texts"
+        app:esbTitle="Example 2 with title styling"
+        app:esbMax="200"
+        app:esbValue="175" />
+
+    <com.gregacucnik.editableseekbar.EditableSeekBar
+        android:id="@+id/esbExample3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:esbSelectAllOnFocus="false"
+        app:esbTitle="Example 3 with disabled select all on focus"
+        app:esbMax="20"
+        app:esbValue="3" />
+
+    <com.gregacucnik.editableseekbar.EditableSeekBar
+        android:id="@+id/esbExample4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:esbTitle="Example 4 with custom edit text width"
+        app:esbEditTextFontSize="24sp"
+        app:esbEditTextWidth="150dp"
+        app:esbMax="5000"
+        app:esbValue="1000" />
+
+</LinearLayout>
