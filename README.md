@@ -8,13 +8,15 @@
             
 2. Include EditableSeekBar widget in your layout
     
-    `<com.gregacucnik.EditableSeekBar
-        android:id="@+id/esbExample"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:esbTitle="Example title"
-        app:esbMax="5000"
-        app:esbValue="1000" />`
+    ```
+            <com.gregacucnik.EditableSeekBar
+                    android:id="@+id/esbExample"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:esbTitle="Example title"
+                    app:esbMax="5000"
+                    app:esbValue="1000" />
+```
 
 3. (Optional) Use `OnEditableSeekBarChangeListener` to get callbacks for any changes
 
