@@ -4,7 +4,7 @@
 
 1. Add the dependency in your build.gradle
 
-            `compile 'com.gregacucnik:editableseekbar:1.0'`
+            compile 'com.gregacucnik:editableseekbar:1.0'
             
 2. Include EditableSeekBar widget in your layout
     
