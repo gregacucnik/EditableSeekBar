@@ -1,4 +1,4 @@
-package com.gregacucnik.editableseekbar;
+package com.gregacucnik;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -19,6 +19,8 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import com.gregacucnik.editableseekbar.R;
 
 /**
  * Created by Grega on 13/11/15.
