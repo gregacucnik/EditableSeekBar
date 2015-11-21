@@ -1,1 +1,1 @@
-include ':app', ':EditableSeekBar'
+include ':app', ':editableseekbar'
