@@ -1,5 +1,9 @@
 # EditableSeekBar
 
+Combination of SeekBar and EditText.
+
+![Sample Screenshot](https://raw.githubusercontent.com/gregacucnik/EditableSeekBar/master/editableseekbar_big.gif)
+
 # Usage
 
 1. Add the dependency in your build.gradle
