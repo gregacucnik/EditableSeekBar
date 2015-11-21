@@ -1,6 +1,11 @@
 # EditableSeekBar
 
+Combination of SeekBar and EditText. Android 4.1.2+
+
+![Sample Screenshot](https://raw.githubusercontent.com/gregacucnik/EditableSeekBar/master/editableseekbar_big.gif)
+
 # Usage
+*For a working implementation in the sample app, see the `app/` folder.*
 
 1. Add the dependency in your build.gradle
 
