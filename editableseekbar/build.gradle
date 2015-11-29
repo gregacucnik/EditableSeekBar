@@ -8,9 +8,9 @@ ext {
     libraryName = 'EditableSeekBar'
     artifact = 'editableseekbar'
 
-    libraryDescription = ''
+    libraryDescription = 'Combination of SeekBar and EditText. Android 4.1.2+'
 
-    libraryVersion = '1.0'
+    libraryVersion = '1.1'
 
     developerId = 'gregacucnik'
     developerName = 'Grega Čučnik'
@@ -24,8 +24,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
     }
     buildTypes {
         release {

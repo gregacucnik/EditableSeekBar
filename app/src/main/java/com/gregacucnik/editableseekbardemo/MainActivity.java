@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         EditableSeekBar esbExample1 = (EditableSeekBar)findViewById(R.id.esbExample1);
+        esbExample1.setValue(90);
 
         esbExample1.setOnEditableSeekBarChangeListener(new EditableSeekBar.OnEditableSeekBarChangeListener() {
             @Override

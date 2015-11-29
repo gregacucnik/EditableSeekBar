@@ -35,6 +35,8 @@ public class EditableSeekBar extends RelativeLayout implements SeekBar.OnSeekBar
     private boolean animateChanges;
     private ValueAnimator seekBarAnimator;
 
+    private int currentValue = 0;
+
     private static final int SEEKBAR_DEFAULT_MAX = 100;
     private static final int EDITTEXT_DEFAULT_WIDTH = 50;
     private static final int EDITTEXT_DEFAULT_FONT_SIZE = 18;
@@ -123,6 +125,8 @@ public class EditableSeekBar extends RelativeLayout implements SeekBar.OnSeekBar
 
             if(selectOnFocus)
                 esbEditText.selectAll();
+            else
+                esbEditText.setSelection(esbEditText.getText().length());
         }
 
         if(mListener != null)
@@ -138,12 +142,16 @@ public class EditableSeekBar extends RelativeLayout implements SeekBar.OnSeekBar
 
         if(selectOnFocus)
             esbEditText.selectAll();
+        else
+            esbEditText.setSelection(esbEditText.getText().length());
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         if(mListener != null)
             mListener.onStopTrackingTouch(seekBar);
+
+        currentValue = seekBar.getProgress();
     }
 
     @Override
@@ -167,14 +175,19 @@ public class EditableSeekBar extends RelativeLayout implements SeekBar.OnSeekBar
 
                 if(selectOnFocus)
                     esbEditText.selectAll();
+                else
+                    esbEditText.setSelection(esbEditText.getText().length());
 
                 if(mListener != null)
                     mListener.onEnteredValueTooHigh();
             }
 
-            setSeekBarValue(value);
-        }else
-            setSeekBarValue(0);
+            currentValue = value;
+            setSeekBarValue(currentValue);
+        }else {
+            currentValue = 0;
+            setSeekBarValue(currentValue);
+        }
     }
 
     @Override
@@ -182,10 +195,12 @@ public class EditableSeekBar extends RelativeLayout implements SeekBar.OnSeekBar
         if(v instanceof EditText){
             if(!hasFocus) {
                 if (esbEditText.getText().toString().isEmpty())
-                    setEditTextValue(esbSeekBar.getProgress());
+                    setEditTextValue(currentValue);
             }else{
                 if(selectOnFocus)
                     esbEditText.selectAll();
+                else
+                    esbEditText.setSelection(esbEditText.getText().length());
             }
         }
     }
@@ -228,7 +243,7 @@ public class EditableSeekBar extends RelativeLayout implements SeekBar.OnSeekBar
             if(animateChanges)
                 animateSeekbar(esbSeekBar.getProgress(), value);
             else
-            esbSeekBar.setProgress(value);
+                esbSeekBar.setProgress(value);
         }
     }
 
@@ -240,8 +255,10 @@ public class EditableSeekBar extends RelativeLayout implements SeekBar.OnSeekBar
         if(value == null)
             return;
 
-        setEditTextValue(value);
-        setSeekBarValue(value);
+        currentValue = value;
+
+        setEditTextValue(currentValue);
+        setSeekBarValue(currentValue);
     }
 
     /**
@@ -249,7 +266,7 @@ public class EditableSeekBar extends RelativeLayout implements SeekBar.OnSeekBar
      * @return integer
      */
     public int getValue(){
-        return esbSeekBar.getProgress();
+        return currentValue;
     }
 
     /**
@@ -259,10 +276,15 @@ public class EditableSeekBar extends RelativeLayout implements SeekBar.OnSeekBar
     public void setMaxValue(int max){
         if(esbSeekBar != null && max > 0){
             esbSeekBar.setMax(max);
-            setEditTextValue(esbSeekBar.getProgress());
+            currentValue = esbSeekBar.getProgress();
+            setEditTextValue(currentValue);
         }
     }
 
+    /**
+     * Enable or disable SeekBar animation on value change
+     * @param animate true/false
+     */
     public void setAnimateSeekBar(boolean animate){
         this.animateChanges = animate;
     }
@@ -307,12 +329,11 @@ public class EditableSeekBar extends RelativeLayout implements SeekBar.OnSeekBar
     public Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
         SavedState ss = new SavedState(superState);
-        ss.value = esbSeekBar.getProgress();
+        ss.value = currentValue;
         ss.focus = selectOnFocus;
         ss.animate = animateChanges;
         return ss;
     }
-
 
 
     @Override
@@ -320,6 +341,8 @@ public class EditableSeekBar extends RelativeLayout implements SeekBar.OnSeekBar
         SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
         setValue(ss.value);
+        animateChanges = ss.animate;
+        selectOnFocus = ss.focus;
     }
 
     @Override
@@ -348,8 +371,7 @@ public class EditableSeekBar extends RelativeLayout implements SeekBar.OnSeekBar
                 }
             });
         }else
-            seekBarAnimator.setIntValues( startValue, endValue);
-
+            seekBarAnimator.setIntValues(startValue, endValue);
 
         seekBarAnimator.start();
     }
