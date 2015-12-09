@@ -36,6 +36,9 @@ Combination of SeekBar and EditText. Android 4.1.2+
  * `esbEditTextWidth` Custom EditText width (default: 50dp)
  * `esbEditTextFontSize` Custom EditText font size (default: 18sp)
 
+
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-EditableSeekBar-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2888)
+
 License
 =======
 The MIT License (MIT)
