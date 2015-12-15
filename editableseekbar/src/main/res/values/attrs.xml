@@ -3,6 +3,7 @@
     <declare-styleable name="EditableSeekBar">
         <attr name="esbTitleAppearance" format="reference" />
         <attr name="esbMax" format="integer" />
+        <attr name="esbMin" format="integer" />
         <attr name="esbValue" format="integer" />
         <attr name="esbTitle" format="string" />
         <attr name="esbSelectAllOnFocus" format="boolean" />

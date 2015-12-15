@@ -10,7 +10,9 @@
         android:id="@+id/esbExample1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:esbTitle="Example 1 with title" />
+        app:esbTitle="Example 1 with title"
+        app:esbMin="-100"
+        app:esbMax="-50" />
 
     <com.gregacucnik.EditableSeekBar
         android:id="@+id/esbExample2"
@@ -19,7 +21,8 @@
         app:esbTitleAppearance="@style/Texts"
         app:esbTitle="Example 2 with title styling"
         app:esbMax="200"
-        app:esbValue="175" />
+        app:esbMin="-100"
+        app:esbValue="150" />
 
     <com.gregacucnik.EditableSeekBar
         android:id="@+id/esbExample3"
@@ -27,7 +30,8 @@
         android:layout_height="wrap_content"
         app:esbSelectAllOnFocus="false"
         app:esbTitle="Example 3 with disabled select all on focus"
-        app:esbMax="20"
+        app:esbMin="50"
+        app:esbMax="100"
         app:esbValue="3" />
 
     <com.gregacucnik.EditableSeekBar

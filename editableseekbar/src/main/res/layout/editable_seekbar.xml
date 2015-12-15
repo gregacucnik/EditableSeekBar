@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/esbTitle">
 
-    <EditText
+    <com.gregacucnik.ESB_EditText
         android:id="@+id/esbEditText"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:text="44"
-        android:inputType="number" />
+        android:inputType="numberSigned" />
 
     <SeekBar
         android:id="@+id/esbSeekBar"

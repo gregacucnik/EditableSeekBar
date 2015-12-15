@@ -9,7 +9,7 @@ Combination of SeekBar and EditText. Android 4.1.2+
 
 1. Add the dependency in your build.gradle
 
-            compile 'com.gregacucnik:editableseekbar:1.1'
+            compile 'com.gregacucnik:editableseekbar:1.2'
             
 2. Include EditableSeekBar widget in your layout
     

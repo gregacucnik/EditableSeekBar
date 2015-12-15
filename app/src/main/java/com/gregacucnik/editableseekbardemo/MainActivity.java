@@ -3,6 +3,7 @@ package com.gregacucnik.editableseekbardemo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.SeekBar;
 
 import com.gregacucnik.EditableSeekBar;
@@ -37,6 +38,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onEnteredValueTooHigh() {
 
+            }
+
+            @Override
+            public void onEnteredValueTooLow() {
+
+            }
+
+            @Override
+            public void onEditableSeekBarValueChanged(int value){
+                Log.i("Change", "" + value);
             }
         });
 
