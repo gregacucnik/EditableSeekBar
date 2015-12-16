@@ -3,7 +3,6 @@ package com.gregacucnik.editableseekbardemo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.SeekBar;
 
 import com.gregacucnik.EditableSeekBar;
@@ -21,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
         esbExample1.setOnEditableSeekBarChangeListener(new EditableSeekBar.OnEditableSeekBarChangeListener() {
             @Override
-            public void onEditabelSeekBarProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            public void onEditableSeekBarProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
             }
 
@@ -46,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onEditableSeekBarValueChanged(int value){
-                Log.i("Change", "" + value);
+            public void onEditableSeekBarValueChanged(int value) {
+
             }
         });
 

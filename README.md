@@ -24,11 +24,18 @@ Combination of SeekBar and EditText. Android 4.1.2+
 ```
 
 3. (Optional) Use `OnEditableSeekBarChangeListener` to get callbacks for any changes
+ * `onEditableSeekBarProgressChanged(SeekBar seekBar, int progress, boolean fromUser)` Sent when seekbar is moving
+ * `onStartTrackingTouch(SeekBar seekBar)` Seekbar moving started by user touch
+ * `onStopTrackingTouch(SeekBar seekBar)` Seekbar moving finished by user touch (also onEditableSeekBarValueChanged sent)
+ * `onEnteredValueTooHigh()` Entered value is higher than maxValue
+ * `onEnteredValueTooLow()` Entered value is lower than minValue
+ * `onEditableSeekBarValueChanged(int value)` Current value after change or when keyboard dismissed
 
 # Customization
 
- * `esbValue` Value for EditableSeekBar
+ * `esbValue` Value for EditableSeekBar (must be in range)
  * `esbMax` Maximum value
+ * `esbMin` Minimum value
  * `esbTitle` Hidden, if empty
  * `esbTitleAppearance` Custom Title TextView Appearance
  * `esbSelectAllOnFocus` Auto select EditText on touch (default: true)
