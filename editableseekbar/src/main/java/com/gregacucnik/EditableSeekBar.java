@@ -273,6 +273,12 @@ public class EditableSeekBar extends RelativeLayout implements SeekBar.OnSeekBar
     }
 
     @Override
+    public void setEnabled(boolean enabled) {
+        esbSeekBar.setEnabled(enabled);
+        esbEditText.setEnabled(enabled);
+    }
+
+    @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if(v instanceof EditText){
             if(!hasFocus) {
