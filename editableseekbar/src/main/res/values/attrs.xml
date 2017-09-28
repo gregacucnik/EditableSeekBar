@@ -11,4 +11,9 @@
         <attr name="esbEditTextWidth" format="dimension" />
         <attr name="esbEditTextFontSize" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="EditableSeekBarPreference">
+        <attr name="esbpMax" format="integer" />
+        <attr name="esbpMin" format="integer" />
+    </declare-styleable>
 </resources>
