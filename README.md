@@ -31,7 +31,7 @@ Combination of SeekBar and EditText. Android 4.1.2+
  * `onEnteredValueTooLow()` Entered value is lower than minValue
  * `onEditableSeekBarValueChanged(int value)` Current value after change or when keyboard dismissed
 
-# Customization
+## Customization
 
  * `esbValue` Value for EditableSeekBar (must be in range)
  * `esbMax` Maximum value
@@ -49,13 +49,21 @@ You can use EditableSeekBar as a preference on a PreferenceScreen
 
 ```
         <com.gregacucnik.Preference.EditableSeekBarPreference
-                android:key="conn_msg_interval"
+                android:key="preference_key"
                 android:defaultValue="20"
-                android:title="@string/settings_message_check_interval"
+                android:title="Preference title"
                 app:esbpMin="10"
                 app:esbpMax="120" />
 ```
 
+## Customization
+
+EditableSeekBarPreference has these customizations availiable: 
+
+ * `esbpMax` Maximum value
+ * `esbpMin` Minimum value
+
+For value and title use preferences' existing values, e.g. `title` and `defaultValue`.
 
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-EditableSeekBar-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2888)
 
