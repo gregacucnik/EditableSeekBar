@@ -13,7 +13,7 @@ Combination of SeekBar and EditText. Android 4.1.2+
             
 2. Include EditableSeekBar widget in your layout
     
-    ```
+```
             <com.gregacucnik.EditableSeekBar
                     android:id="@+id/esbExample"
                     android:layout_width="match_parent"
@@ -42,6 +42,19 @@ Combination of SeekBar and EditText. Android 4.1.2+
  * `esbAnimateSeekBar` Animate SeekBar on value change (default: true)
  * `esbEditTextWidth` Custom EditText width (default: 50dp)
  * `esbEditTextFontSize` Custom EditText font size (default: 18sp)
+ 
+# Using as a preference
+
+You can use EditableSeekBar as a preference on a PreferenceScreen
+
+```
+        <com.gregacucnik.Preference.EditableSeekBarPreference
+                android:key="conn_msg_interval"
+                android:defaultValue="20"
+                android:title="@string/settings_message_check_interval"
+                app:esbpMin="10"
+                app:esbpMax="120" />
+```
 
 
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-EditableSeekBar-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2888)
