@@ -9,18 +9,20 @@ Combination of SeekBar and EditText. Android 4.1.2+
 
 1. Add the dependency in your build.gradle
 
-            compile 'com.gregacucnik:editableseekbar:1.2'
+```
+compile 'com.gregacucnik:editableseekbar:1.2'
+```
             
 2. Include EditableSeekBar widget in your layout
     
-```
-            <com.gregacucnik.EditableSeekBar
-                    android:id="@+id/esbExample"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:esbTitle="Example title"
-                    app:esbMax="5000"
-                    app:esbValue="1000" />
+```xml
+<com.gregacucnik.EditableSeekBar
+        android:id="@+id/esbExample"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:esbTitle="Example title"
+        app:esbMax="5000"
+        app:esbValue="1000" />
 ```
 
 3. (Optional) Use `OnEditableSeekBarChangeListener` to get callbacks for any changes
@@ -47,13 +49,13 @@ Combination of SeekBar and EditText. Android 4.1.2+
 
 You can use EditableSeekBar as a preference on a PreferenceScreen
 
-```
-        <com.gregacucnik.Preference.EditableSeekBarPreference
-                android:key="preference_key"
-                android:defaultValue="20"
-                android:title="Preference title"
-                app:esbpMin="10"
-                app:esbpMax="120" />
+```xml
+<com.gregacucnik.Preference.EditableSeekBarPreference
+        android:key="preference_key"
+        android:defaultValue="20"
+        android:title="Preference title"
+        app:esbpMin="10"
+        app:esbpMax="120" />
 ```
 
 ## Customization
