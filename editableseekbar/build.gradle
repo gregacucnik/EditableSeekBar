@@ -1,21 +1,7 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
 
-ext {
-    bintrayRepo = 'maven'
-    bintrayName = 'editableseekbar'
-
-    publishedGroupId = 'com.gregacucnik'
-    libraryName = 'EditableSeekBar'
-    artifact = 'editableseekbar'
-
-    libraryDescription = 'Combination of SeekBar and EditText. Android 4.1.2+'
-
-    libraryVersion = '1.2'
-
-    developerId = 'gregacucnik'
-    developerName = 'Grega Čučnik'
-    developerEmail = ''
-}
+group='com.github.mc0239'
 
 android {
     compileSdkVersion 26
@@ -24,7 +10,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 26
         versionCode 4
-        versionName "1.3"
+        versionName "1.3.0"
     }
     buildTypes {
         release {
@@ -36,9 +22,6 @@ android {
 
 dependencies {
     //compile fileTree(dir: 'libs', include: ['*.jar'])
-    //testCompile 'junit:junit:4.12'
+    // TODO testCompile 'junit:junit:4.12'
     implementation 'com.android.support:appcompat-v7:26.1.0'
 }
-
-apply from: 'https://raw.githubusercontent.com/attwellBrian/JCenter/master/installv1.gradle'
-apply from: 'https://raw.githubusercontent.com/attwellBrian/JCenter/master/bintrayv1.gradle'

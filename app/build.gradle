@@ -20,8 +20,9 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation 'junit:junit:4.12'
+    api project(':editableseekbar')
+
     implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.gregacucnik:editableseekbar:1.2'
-//    compile project(':editableseekbar')
+
+    testImplementation 'junit:junit:4.12'
 }
