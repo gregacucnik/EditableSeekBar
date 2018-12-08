@@ -1,5 +1,7 @@
 # EditableSeekBar
 
+[![Release](https://jitpack.io/v/mc0239/EditableSeekBar.svg)](https://jitpack.io/#mc0239/EditableSeekBar)
+
 Combination of SeekBar and EditText. Android 4.4+
 
 ![Sample Screenshot](https://raw.githubusercontent.com/gregacucnik/EditableSeekBar/master/editableseekbar2.gif)
@@ -7,10 +9,18 @@ Combination of SeekBar and EditText. Android 4.4+
 # Usage
 *For a working implementation in the sample app, see the `app/` folder.*
 
-1. Add the dependency in your build.gradle
+1. Add Jitpack to repositories in `build.gradle` and add EditableSeekBar dependency to dependencies:
+```gradle
+repositories {
+    // your other repos...
+    jcenter()
+    maven { url "https://jitpack.io" }
+}
 
-```
-compile 'com.gregacucnik:editableseekbar:1.3.0'
+dependencies {
+    // your other deps...
+    implementation 'com.github.mc0239:EditableSeekBar:v1.3.1'
+}
 ```
             
 2. Include EditableSeekBar widget in your layout
