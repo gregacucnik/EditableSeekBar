@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 28
 
     defaultConfig {
         applicationId "com.gregacucnik.editableseekbardemo"
-        minSdkVersion 16
-        targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion 19
+        targetSdkVersion 28
+        versionCode 2
+        versionName "1.1"
     }
     buildTypes {
         release {
@@ -22,7 +22,7 @@ dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
     api project(':editableseekbar')
 
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
 
     testImplementation 'junit:junit:4.12'
 }
