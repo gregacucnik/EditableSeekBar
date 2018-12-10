@@ -9,13 +9,13 @@
     android:paddingTop="16dp"
     >
 
-    <com.gregacucnik.EditableSeekBar
+    <com.gregacucnik.editableseekbar.EditableSeekBar
         android:id="@+id/seekBar"
         app:esbAnimateSeekBar="false"
         app:esbTitleAppearance="@style/TextAppearance.AppCompat.Subhead"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-    </com.gregacucnik.EditableSeekBar>
+    </com.gregacucnik.editableseekbar.EditableSeekBar>
 
 </LinearLayout>

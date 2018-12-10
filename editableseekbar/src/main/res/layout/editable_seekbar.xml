@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/esbTitle">
 
-    <com.gregacucnik.ESB_EditText
+    <com.gregacucnik.editableseekbar.ESB_EditText
         android:id="@+id/esbEditText"
         android:layout_width="50dp"
         android:layout_height="wrap_content"

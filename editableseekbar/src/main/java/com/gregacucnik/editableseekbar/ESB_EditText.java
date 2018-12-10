@@ -1,6 +1,7 @@
-package com.gregacucnik;
+package com.gregacucnik.editableseekbar;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
@@ -10,7 +11,7 @@ import android.widget.TextView;
 /**
  * Created by Grega on 15/12/15.
  */
-public class ESB_EditText extends EditText {
+public class ESB_EditText extends AppCompatEditText {
 
     private OnEditTextListener mListener;
 

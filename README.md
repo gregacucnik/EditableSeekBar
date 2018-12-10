@@ -26,7 +26,7 @@ dependencies {
 2. Include EditableSeekBar widget in your layout
     
 ```xml
-<com.gregacucnik.EditableSeekBar
+<com.gregacucnik.editableseekbar.EditableSeekBar
         android:id="@+id/esbExample"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -60,7 +60,7 @@ dependencies {
 You can use EditableSeekBar as a preference on a PreferenceScreen
 
 ```xml
-<com.gregacucnik.Preference.EditableSeekBarPreference
+<com.gregacucnik.editableseekbar.EditableSeekBarPreference
         android:key="preference_key"
         android:defaultValue="20"
         android:title="Preference title"

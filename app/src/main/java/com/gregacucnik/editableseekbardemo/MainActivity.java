@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.SeekBar;
 
-import com.gregacucnik.EditableSeekBar;
+import com.gregacucnik.editableseekbar.EditableSeekBar;
 
 public class MainActivity extends AppCompatActivity {
 

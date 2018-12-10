@@ -6,7 +6,7 @@
               android:layout_height="match_parent"
               android:padding="8dp">
 
-    <com.gregacucnik.EditableSeekBar
+    <com.gregacucnik.editableseekbar.EditableSeekBar
         android:id="@+id/esbExample1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,7 +14,7 @@
         app:esbMin="-100"
         app:esbMax="-50" />
 
-    <com.gregacucnik.EditableSeekBar
+    <com.gregacucnik.editableseekbar.EditableSeekBar
         android:id="@+id/esbExample2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
         app:esbMin="-100"
         app:esbValue="150" />
 
-    <com.gregacucnik.EditableSeekBar
+    <com.gregacucnik.editableseekbar.EditableSeekBar
         android:id="@+id/esbExample3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
         app:esbMax="100"
         app:esbValue="3" />
 
-    <com.gregacucnik.EditableSeekBar
+    <com.gregacucnik.editableseekbar.EditableSeekBar
         android:id="@+id/esbExample4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

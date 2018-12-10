@@ -1,4 +1,4 @@
-package com.gregacucnik.Preference;
+package com.gregacucnik.editableseekbar;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -8,8 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
 
-import com.gregacucnik.EditableSeekBar;
-import com.gregacucnik.editableseekbar.R;
 
 public class EditableSeekBarPreference extends DialogPreference {
 
