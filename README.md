@@ -58,6 +58,8 @@ Include EditableSeekBarPreference in your PreferenceScreen:
     app:useSimpleSummaryProvider="true" />
 ```
 
+TODO: also requires overriding `onDisplayPreferenceDialog` in `PreferenceFragmentCompat` to display `EditableSeekBarPreferenceDialog`.
+
 ## Customization
 
  * `value` Value for EditableSeekBar (must be in range)
@@ -79,6 +81,7 @@ License
 The MIT License (MIT)
 
 Copyright (c) 2015 Grega Čučnik
+
 Copyright (c) 2020 Martin Čebular
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
