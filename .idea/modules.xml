@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/EditableSeekBar.iml" filepath="$PROJECT_DIR$/EditableSeekBar.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/editableseekbar/editableseekbar.iml" filepath="$PROJECT_DIR$/editableseekbar/editableseekbar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EditableSeekBar.iml" filepath="$PROJECT_DIR$/EditableSeekBar.iml" group="EditableSeekBar" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="EditableSeekBar/app" />
+      <module fileurl="file://$PROJECT_DIR$/editableseekbar/editableseekbar.iml" filepath="$PROJECT_DIR$/editableseekbar/editableseekbar.iml" group="EditableSeekBar/editableseekbar" />
     </modules>
   </component>
 </project>

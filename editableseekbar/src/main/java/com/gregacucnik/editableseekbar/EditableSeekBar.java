@@ -1,6 +1,5 @@
 package com.gregacucnik.editableseekbar;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Parcel;
@@ -8,45 +7,28 @@ import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-/**
- * Created by Grega on 13/11/15.
- */
-public class EditableSeekBar extends RelativeLayout implements SeekBar.OnSeekBarChangeListener, TextWatcher, View.OnFocusChangeListener, ESB_EditText.OnEditTextListener {
+import androidx.annotation.Nullable;
 
-    private TextView esbTitle;
-    private SeekBar esbSeekBar;
-    private ESB_EditText esbEditText;
+import com.gregacucnik.editableseekbar.util.Constants;
 
-    private boolean selectOnFocus;
-    private boolean animateChanges;
-    private ValueAnimator seekBarAnimator;
+public class EditableSeekBar extends RelativeLayout implements
+        TextWatcher,
+        View.OnFocusChangeListener,
+        EsbEditText.OnEditTextListener,
+        SeekBar.OnSeekBarChangeListener {
 
-    private int currentValue = 0;
-    private int minValue = 0;
-    private int maxValue = 100;
-
-    private boolean touching = false;
-
-    private static final int SEEKBAR_DEFAULT_MAX = 100;
-    private static final int SEEKBAR_DEFAULT_MIN = 0;
     private static final int EDITTEXT_DEFAULT_WIDTH = 50;
     private static final int EDITTEXT_DEFAULT_FONT_SIZE = 18;
-    private static final int ANIMATION_DEFAULT_DURATION = 300;
-
-    private OnEditableSeekBarChangeListener mListener;
-
 
     public interface OnEditableSeekBarChangeListener{
         void onEditableSeekBarProgressChanged(SeekBar seekBar, int progress, boolean fromUser);
@@ -57,6 +39,25 @@ public class EditableSeekBar extends RelativeLayout implements SeekBar.OnSeekBar
         void onEditableSeekBarValueChanged(int value);
     }
 
+    //
+
+    private TextView esbTitle;
+    private EsbSeekBar esbSeekBar;
+    private EsbEditText esbEditText;
+
+    private OnEditableSeekBarChangeListener mListener;
+
+    private int currentValue = 0;
+    private int minValue = 0;
+    private int maxValue = 100;
+
+    private boolean selectOnFocus;
+    private boolean touching = false;
+
+    private boolean animateChanges;
+
+    //
+
     public EditableSeekBar(Context context) {
         super(context);
     }
@@ -64,43 +65,16 @@ public class EditableSeekBar extends RelativeLayout implements SeekBar.OnSeekBar
     public EditableSeekBar(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        inflate(getContext(), R.layout.editable_seekbar, this);
-
         setSaveEnabled(true);
+        initView(context);
+        initAttrs(context, attrs);
+    }
 
-        esbTitle = (TextView)findViewById(R.id.esbTitle);
-        esbSeekBar = (SeekBar)findViewById(R.id.esbSeekBar);
-        esbEditText = (ESB_EditText)findViewById(R.id.esbEditText);
-
-
-
-
-        float defaultEditTextWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EDITTEXT_DEFAULT_WIDTH, getResources().getDisplayMetrics());
-        int defaultEditTextFontSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, EDITTEXT_DEFAULT_FONT_SIZE, getResources().getDisplayMetrics());
-
-        TypedArray a = context.getTheme().obtainStyledAttributes(
-                                            attrs,
-                                            R.styleable.EditableSeekBar,
-                                            0, 0);
-
-        try {
-            setTitle(a.getString(R.styleable.EditableSeekBar_esbTitle));
-            esbTitle.setTextAppearance(getContext(), a.getResourceId(R.styleable.EditableSeekBar_esbTitleAppearance, 0));
-            selectOnFocus = a.getBoolean(R.styleable.EditableSeekBar_esbSelectAllOnFocus, true);
-            animateChanges = a.getBoolean(R.styleable.EditableSeekBar_esbAnimateSeekBar, true);
-            esbEditText.setSelectAllOnFocus(selectOnFocus);
-            esbEditText.setTextSize(TypedValue.COMPLEX_UNIT_PX, a.getDimensionPixelSize(R.styleable.EditableSeekBar_esbEditTextFontSize, defaultEditTextFontSize));
-
-            int min = a.getInteger(R.styleable.EditableSeekBar_esbMin, SEEKBAR_DEFAULT_MIN);
-            int max = a.getInteger(R.styleable.EditableSeekBar_esbMax, SEEKBAR_DEFAULT_MAX);
-
-            setRange(min, max);
-
-            setValue(a.getInteger(R.styleable.EditableSeekBar_esbValue, translateToRealValue(getRange()/2)));
-            setEditTextWidth(a.getDimension(R.styleable.EditableSeekBar_esbEditTextWidth, defaultEditTextWidth));
-        } finally {
-            a.recycle();
-        }
+    private void initView(Context context) {
+        inflate(context, R.layout.editable_seekbar, this);
+        esbTitle = findViewById(R.id.esbTitle);
+        esbSeekBar = findViewById(R.id.esbSeekBar);
+        esbEditText = findViewById(R.id.esbEditText);
 
         esbSeekBar.setOnSeekBarChangeListener(this);
         esbEditText.addTextChangedListener(this);
@@ -109,20 +83,229 @@ public class EditableSeekBar extends RelativeLayout implements SeekBar.OnSeekBar
 
         esbSeekBar.setOnTouchListener(new OnTouchListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public boolean onTouch(View view, MotionEvent motionEvent) {
                 hideKeyboard();
                 return false;
             }
         });
     }
 
+    private void initAttrs(Context context, AttributeSet attrs) {
+        float defaultEditTextWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EDITTEXT_DEFAULT_WIDTH, getResources().getDisplayMetrics());
+        int defaultEditTextFontSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, EDITTEXT_DEFAULT_FONT_SIZE, getResources().getDisplayMetrics());
 
-    private void setEditTextWidth(float width) {
+        TypedArray a1 = context.getTheme().obtainStyledAttributes(attrs, R.styleable.EditableSeekBar,0, 0);
+
+        esbTitle.setTextAppearance(context, a1.getResourceId(R.styleable.EditableSeekBar_titleAppearance, 0));
+        selectOnFocus = a1.getBoolean(R.styleable.EditableSeekBar_selectAllOnFocus, true);
+        animateChanges = a1.getBoolean(R.styleable.EditableSeekBar_animateSeekBar, true);
+
+        esbEditText.setTextSize(TypedValue.COMPLEX_UNIT_PX, a1.getDimensionPixelSize(R.styleable.EditableSeekBar_editTextFontSize, defaultEditTextFontSize));
         ViewGroup.LayoutParams params = esbEditText.getLayoutParams();
-        params.width = (int) width;
-
+        params.width = (int) a1.getDimension(R.styleable.EditableSeekBar_editTextWidth, defaultEditTextWidth);
         esbEditText.setLayoutParams(params);
+
+        int min = a1.getInteger(R.styleable.EditableSeekBar_minValue, Constants.DEFAULT_MIN_VALUE);
+        int max = a1.getInteger(R.styleable.EditableSeekBar_maxValue, Constants.DEFAULT_MAX_VALUE);
+        setRange(min, max);
+
+        TypedArray a2 = context.getTheme().obtainStyledAttributes(attrs, R.styleable.EditableSeekBarView,0, 0);
+        setTitle(a2.getString(R.styleable.EditableSeekBarView_title));
+        setValue(a2.getInteger(R.styleable.EditableSeekBarView_value, translateToRealValue(getRange()/2)));
+
+        esbEditText.setSelectAllOnFocus(selectOnFocus);
+
+        a1.recycle();
+        a2.recycle();
     }
+
+    //
+
+    @Nullable
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Parcelable superState = super.onSaveInstanceState();
+        SavedState state = new SavedState(superState);
+        state.value = currentValue;
+        state.focus = selectOnFocus;
+        state.animate = animateChanges;
+        return state;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable restoreState) {
+        SavedState state = (SavedState) restoreState;
+        super.onRestoreInstanceState(state.getSuperState());
+        setValue(state.value);
+        this.animateChanges = state.animate;
+        this.selectOnFocus = state.focus;
+    }
+
+    //
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        esbTitle.setEnabled(enabled);
+        esbSeekBar.setEnabled(enabled);
+        esbEditText.setEnabled(enabled);
+    }
+
+    //
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        if (touching) return;
+
+        if (isNumber(editable.toString())) {
+            int value = Integer.parseInt(editable.toString());
+
+            if (value > maxValue && currentValue != maxValue) {
+                // entered value is higher than max
+                value = maxValue;
+                esbEditText.setValue(value);
+
+                if (selectOnFocus) {
+                    esbEditText.selectAll();
+                } else {
+                    esbEditText.selectNone();
+                }
+
+                if (mListener != null) {
+                    mListener.onEnteredValueTooHigh();
+                }
+            }
+
+            if (value < minValue && currentValue != minValue) {
+                // entered value is lower than min
+                value = minValue;
+                esbEditText.setValue(value);
+
+                if (selectOnFocus) {
+                    esbEditText.selectAll();
+                } else {
+                    esbEditText.selectNone();
+                }
+
+                if (mListener != null) {
+                    mListener.onEnteredValueTooLow();
+                }
+            }
+
+            if (value >= minValue && value <= maxValue && value != currentValue) {
+                // value is in bounds, but has changed
+                currentValue = value;
+                esbSeekBar.setProgress(translateFromRealValue(currentValue), animateChanges);
+
+                if (mListener != null) {
+                    mListener.onEditableSeekBarValueChanged(currentValue);
+                }
+            }
+        }
+    }
+
+    //
+
+    @Override
+    public void onFocusChange(View view, boolean hasFocus) {
+        if (view instanceof EditText) {
+            if (!hasFocus) {
+                // if focus has been lost and edit text does not hold a valid value,
+                // reset edit text back to currentValue
+                if (!editTextHasValidValue()) {
+                    esbEditText.setValue(currentValue);
+                    if (mListener != null) {
+                        mListener.onEditableSeekBarValueChanged(currentValue);
+                    }
+                } else {
+                    if (selectOnFocus) {
+                        esbEditText.selectAll();
+                    } else {
+                        esbEditText.selectNone();
+                    }
+                }
+            }
+        }
+    }
+
+    //
+
+    @Override
+    public void onEditTextKeyboardDismissed() {
+        esbEditText.setValue(currentValue);
+        if (mListener != null) {
+            mListener.onEditableSeekBarValueChanged(currentValue);
+        }
+    }
+
+    @Override
+    public void onEditTextKeyboardDone() {
+        esbEditText.setValue(currentValue);
+        if (mListener != null) {
+            mListener.onEditableSeekBarValueChanged(currentValue);
+        }
+        hideKeyboard();
+    }
+
+    //
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        currentValue = translateToRealValue(progress);
+        if (fromUser) {
+            esbEditText.setValue(currentValue);
+            if (selectOnFocus) {
+                esbEditText.selectAll();
+            } else {
+                esbEditText.selectNone();
+            }
+        }
+
+        if (mListener != null) {
+            mListener.onEditableSeekBarProgressChanged(seekBar, progress, fromUser);
+        }
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+        if (mListener != null) {
+            mListener.onStartTrackingTouch(seekBar);
+        }
+
+        touching = true;
+        esbEditText.requestFocus();
+
+        if (selectOnFocus) {
+            esbEditText.selectAll();
+        } else {
+            esbEditText.selectNone();
+        }
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        if (mListener != null) {
+            mListener.onStopTrackingTouch(seekBar);
+        }
+
+        touching = false;
+        currentValue = translateToRealValue(seekBar.getProgress());
+
+        if (mListener != null) {
+            mListener.onEditableSeekBarValueChanged(currentValue);
+        }
+    }
+
+    //
 
     /**
      * Set callback listener for changes of EditableSeekBar.
@@ -132,297 +315,24 @@ public class EditableSeekBar extends RelativeLayout implements SeekBar.OnSeekBar
         this.mListener = listener;
     }
 
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        currentValue = translateToRealValue(progress);
-
-        if(fromUser){
-            setEditTextValue(currentValue);
-
-            if(selectOnFocus)
-                esbEditText.selectAll();
-            else
-                esbEditText.setSelection(esbEditText.getText().length());
-        }
-
-        if(mListener != null)
-            mListener.onEditableSeekBarProgressChanged(seekBar, currentValue, fromUser);
-    }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-        if (mListener != null)
-            mListener.onStartTrackingTouch(seekBar);
-
-        touching = true;
-
-        esbEditText.requestFocus();
-
-        if(selectOnFocus)
-            esbEditText.selectAll();
-        else
-            esbEditText.setSelection(esbEditText.getText().length());
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-        if(mListener != null)
-            mListener.onStopTrackingTouch(seekBar);
-
-        touching = false;
-
-        currentValue = translateToRealValue(seekBar.getProgress());
-
-        if(mListener != null)
-            mListener.onEditableSeekBarValueChanged(currentValue);
-    }
-
-
-    @Override
-    public void onEditTextKeyboardDismissed() {
-        checkValue();
-
-        if(mListener != null)
-            mListener.onEditableSeekBarValueChanged(currentValue);
-    }
-
-    @Override
-    public void onEditTextKeyboardDone() {
-        checkValue();
-
-        if(mListener != null)
-            mListener.onEditableSeekBarValueChanged(currentValue);
-
-        hideKeyboard();
-    }
-
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-        if(touching)
-            return;
-
-        if(!s.toString().isEmpty() && isNumber(s.toString())){
-            int value = Integer.parseInt(s.toString());
-
-            if(value > maxValue && currentValue != maxValue){
-                value = maxValue;
-                setEditTextValue(value);
-
-                if(selectOnFocus)
-                    esbEditText.selectAll();
-                else
-                    esbEditText.setSelection(esbEditText.getText().length());
-
-                if(mListener != null) {
-                    mListener.onEnteredValueTooHigh();
-//                    mListener.onEditableSeekBarValueChanged(currentValue);
-                }
-            }
-
-            if(value < minValue && currentValue != minValue){
-                value = minValue;
-                setEditTextValue(value);
-
-                if(selectOnFocus)
-                    esbEditText.selectAll();
-                else
-                    esbEditText.setSelection(esbEditText.getText().length());
-
-                if(mListener != null) {
-                    mListener.onEnteredValueTooLow();
-//                    mListener.onEditableSeekBarValueChanged(currentValue);
-                }
-            }
-
-            if(value >= minValue && value <= maxValue && value != currentValue) {
-                currentValue = value;
-                setSeekBarValue(translateFromRealValue(currentValue));
-
-                if(mListener != null)
-                    mListener.onEditableSeekBarValueChanged(currentValue);
-            }
-        }else {
-//            currentValue = minValue;
-//            setSeekBarValue(translateFromRealValue(currentValue));
-        }
-    }
-
-    private void checkValue(){
-        setEditTextValue(currentValue);
-    }
-
-    private boolean isNumber(String s) {
-        try{
-            Integer.parseInt(s);
-        }catch (NumberFormatException e){
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
-        esbSeekBar.setEnabled(enabled);
-        esbEditText.setEnabled(enabled);
-    }
-
-    @Override
-    public void onFocusChange(View v, boolean hasFocus) {
-        if(v instanceof EditText){
-            if(!hasFocus) {
-                boolean sendValueChanged = esbEditText.getText().toString().isEmpty() || !isNumber(esbEditText.getText().toString()) || !isInRange(Integer.parseInt(esbEditText.getText().toString()));
-
-                if (sendValueChanged){
-                    checkValue();
-                }
-
-                if(mListener != null && sendValueChanged)
-                    mListener.onEditableSeekBarValueChanged(currentValue);
-//                    setEditTextValue(translateFromRealValue(currentValue));
-
-            }else{
-                if(selectOnFocus)
-                    esbEditText.selectAll();
-                else
-                    esbEditText.setSelection(esbEditText.getText().length());
-            }
-        }
-    }
-
-    private void hideKeyboard(){
-        InputMethodManager imm = (InputMethodManager) getContext().getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(esbEditText.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-    }
-
-    /**
-     * Set title for EditableSeekBar. Title hidden if empty or null.
-     * @param title String
-     */
-    public void setTitle(String title){
-        if(title != null && !title.isEmpty()) {
-            esbTitle.setText(title);
-            esbTitle.setVisibility(View.VISIBLE);
-        }else
-            esbTitle.setVisibility(View.GONE);
-    }
-
-    /**
-     * Set title color.
-     * @param color integer
-     */
-    public void setTitleColor(int color){
-        esbTitle.setTextColor(color);
-    }
-
-    private void setEditTextValue(int value){
-        if(esbEditText != null) {
-//            esbEditText.removeTextChangedListener(this);
-            esbEditText.setText(Integer.toString(value));
-//            esbEditText.addTextChangedListener(this);
-        }
-    }
-
-    private void setSeekBarValue(int value){
-        if(esbSeekBar != null){
-            if(animateChanges)
-                animateSeekbar(esbSeekBar.getProgress(), value);
-            else
-                esbSeekBar.setProgress(value);
-        }
-    }
-
-    private int translateFromRealValue(int realValue){
-        return realValue < 0 ? Math.abs(realValue - minValue) : realValue - minValue;
-    }
-
-    private int translateToRealValue(int sbValue){
-        return minValue + sbValue;
-    }
-
-    /***
-     * Set range for EditableSeekBar. Min value must be smaller than max value.
-     * @param min integer
-     * @param max integer
-     */
-    public void setRange(int min, int max) {
-        if(min > max){
-            minValue = SEEKBAR_DEFAULT_MIN;
-            maxValue = SEEKBAR_DEFAULT_MAX;
-        }else{
-            minValue = min;
-            maxValue = max;
-        }
-
-        esbSeekBar.setMax(getRange());
-
-        if(!isInRange(currentValue)) {
-            if (currentValue < minValue)
-                currentValue = minValue;
-
-            if (currentValue > maxValue)
-                currentValue = maxValue;
-
-            setValue(currentValue);
-        }
-    }
-
-    /**
-     * Get range of EditableSeekBar.
-     * @return integer - Absolute range
-     */
-    public int getRange(){
-        return maxValue < 0 ? Math.abs(maxValue - minValue) : maxValue - minValue;
-    }
-
     /**
      * Programmatically set value for EditableSeekBar. If out of range, appropriate callback sent and value set to closest (min or max).
      * @param value integer
      */
-    public void setValue(Integer value){
-        if(value == null)
-            return;
+    public void setValue(Integer value) {
+        if (value == null) return;
 
-        if(!isInRange(value)) {
-            if (value < minValue)
+        if (!isInRange(value)) {
+            if (value < minValue) {
                 value = minValue;
-
-            if (value > maxValue)
+            } else if (value > maxValue) {
                 value = maxValue;
+            }
         }
 
         currentValue = value;
-
-        setEditTextValue(currentValue);
-        setSeekBarValue(translateFromRealValue(currentValue));
-    }
-
-    private boolean isInRange(int value){
-
-        if(value < minValue){
-            if(mListener != null)
-                mListener.onEnteredValueTooLow();
-
-            return false;
-        }
-
-        if(value > maxValue){
-            if(mListener != null)
-                mListener.onEnteredValueTooHigh();
-
-            return false;
-        }
-
-        return true;
+        esbEditText.setValue(currentValue);
+        esbSeekBar.setProgressAnimate(translateFromRealValue(currentValue), animateChanges);
     }
 
     /**
@@ -433,11 +343,38 @@ public class EditableSeekBar extends RelativeLayout implements SeekBar.OnSeekBar
         return currentValue;
     }
 
+    /***
+     * Set range for EditableSeekBar. Min value must be smaller than max value.
+     * @param min integer
+     * @param max integer
+     */
+    public void setRange(int min, int max) {
+        if(min > max) {
+            minValue = Constants.DEFAULT_MIN_VALUE;
+            maxValue = Constants.DEFAULT_MAX_VALUE;
+        } else {
+            minValue = min;
+            maxValue = max;
+        }
+
+        esbSeekBar.setMax(getRange());
+        // re-set value to fit new ranges
+        setValue(currentValue);
+    }
+
+    /**
+     * Get range of EditableSeekBar.
+     * @return integer - Absolute range
+     */
+    public int getRange() {
+        return maxValue < 0 ? Math.abs(maxValue - minValue) : maxValue - minValue;
+    }
+
     /**
      * Set maximum value for EditableSeekBar.
      * @param max integer
      */
-    public void setMaxValue(int max){
+    public void setMaxValue(int max) {
         setRange(minValue, max);
     }
 
@@ -445,33 +382,106 @@ public class EditableSeekBar extends RelativeLayout implements SeekBar.OnSeekBar
      * Set minimum value for EditableSeekBar.
      * @param min integer
      */
-    public void setMinValue(int min){
+    public void setMinValue(int min) {
         setRange(min, maxValue);
+    }
+
+    /**
+     * Set title for EditableSeekBar. Title hidden if empty or null.
+     * @param title String
+     */
+    public void setTitle(String title) {
+        if (title != null && !title.isEmpty()) {
+            esbTitle.setText(title);
+            esbTitle.setVisibility(View.VISIBLE);
+        } else {
+            esbTitle.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Set title color.
+     * @param color integer
+     */
+    public void setTitleColor(int color) {
+        esbTitle.setTextColor(color);
     }
 
     /**
      * Enable or disable SeekBar animation on value change
      * @param animate true/false
      */
-    public void setAnimateSeekBar(boolean animate){
+    public void setAnimateSeekBar(boolean animate) {
         this.animateChanges = animate;
     }
 
+    //
+
+    private boolean isNumber(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isInRange(int value) {
+        if(value < minValue) {
+            if(mListener != null) {
+                mListener.onEnteredValueTooLow();
+            }
+            return false;
+        }
+
+        if(value > maxValue) {
+            if(mListener != null) {
+                mListener.onEnteredValueTooHigh();
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean editTextHasValidValue() {
+        Editable editable = esbEditText.getText();
+        if (editable == null) {
+            return false;
+        }
+
+        String textValue = esbEditText.getText().toString();
+        return !textValue.isEmpty() && isNumber(textValue) && isInRange(Integer.parseInt(textValue));
+    }
+
+    private void hideKeyboard(){
+        InputMethodManager imm = (InputMethodManager) getContext().getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(esbEditText.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    private int translateFromRealValue(int realValue) {
+        return realValue < 0 ? Math.abs(realValue - minValue) : realValue - minValue;
+    }
+
+    private int translateToRealValue(int sbValue) {
+        return minValue + sbValue;
+    }
+
+    //
 
     private static class SavedState extends BaseSavedState {
         int value;
-        boolean focus;
-        boolean animate;
+        boolean focus, animate;
 
-        SavedState(Parcelable superState) {
+        public SavedState(Parcelable superState) {
             super(superState);
         }
 
-        private SavedState(Parcel in) {
-            super(in);
-            value = in.readInt();
-            focus = in.readInt() == 1;
-            animate = in.readInt() == 1;
+        public SavedState(Parcel source) {
+            super(source);
+            value = source.readInt();
+            focus = source.readInt() == 1;
+            animate = source.readInt() == 1;
         }
 
         @Override
@@ -482,7 +492,7 @@ public class EditableSeekBar extends RelativeLayout implements SeekBar.OnSeekBar
             out.writeInt(animate ? 1 : 0);
         }
 
-        public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
+        public static final Parcelable.Creator<SavedState> CREATOR = new Creator<SavedState>() {
             public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);
             }
@@ -491,56 +501,7 @@ public class EditableSeekBar extends RelativeLayout implements SeekBar.OnSeekBar
                 return new SavedState[size];
             }
         };
-    }
 
-    @Override
-    public Parcelable onSaveInstanceState() {
-        Parcelable superState = super.onSaveInstanceState();
-        SavedState ss = new SavedState(superState);
-        ss.value = currentValue;
-        ss.focus = selectOnFocus;
-        ss.animate = animateChanges;
-        return ss;
-    }
-
-    @Override
-    public void onRestoreInstanceState(Parcelable state) {
-        SavedState ss = (SavedState) state;
-        super.onRestoreInstanceState(ss.getSuperState());
-        setValue(ss.value);
-        animateChanges = ss.animate;
-        selectOnFocus = ss.focus;
-    }
-
-    @Override
-    protected void dispatchSaveInstanceState(SparseArray container) {
-        super.dispatchFreezeSelfOnly(container);
-    }
-
-    @Override
-    protected void dispatchRestoreInstanceState(SparseArray container) {
-        super.dispatchThawSelfOnly(container);
-    }
-
-    private void animateSeekbar(int startValue, int endValue){
-        if(seekBarAnimator != null && seekBarAnimator.isRunning())
-            seekBarAnimator.cancel();
-
-        if(seekBarAnimator == null){
-            seekBarAnimator = ValueAnimator.ofInt(startValue, endValue);
-            seekBarAnimator.setInterpolator(new DecelerateInterpolator());
-            seekBarAnimator.setDuration(ANIMATION_DEFAULT_DURATION);
-
-            seekBarAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    esbSeekBar.setProgress((Integer) animation.getAnimatedValue());
-                }
-            });
-        }else
-            seekBarAnimator.setIntValues(startValue, endValue);
-
-        seekBarAnimator.start();
     }
 
 }

@@ -2,48 +2,69 @@ package com.gregacucnik.editableseekbar;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.preference.DialogPreference;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.View;
-import android.widget.SeekBar;
 
+import androidx.annotation.Nullable;
+import androidx.preference.DialogPreference;
+
+import com.gregacucnik.editableseekbar.util.TypedArrayUtils;
+
+import static com.gregacucnik.editableseekbar.util.Constants.DEFAULT_MAX_VALUE;
+import static com.gregacucnik.editableseekbar.util.Constants.DEFAULT_MIN_VALUE;
+import static com.gregacucnik.editableseekbar.util.Constants.DEFAULT_VALUE;
 
 public class EditableSeekBarPreference extends DialogPreference {
 
-    private static final int DEFAULT_VALUE = 25;
+    private int value, minValue, maxValue;
 
-    private int value;
+    public EditableSeekBarPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
 
-    private int minVal = 1, maxVal = 100;
+        TypedArray a1 = context.obtainStyledAttributes(attrs, R.styleable.EditableSeekBar, defStyleAttr, defStyleRes);
+        TypedArray a2 = context.obtainStyledAttributes(attrs, R.styleable.EditableSeekBarPreference, defStyleAttr, defStyleRes);
 
-    public EditableSeekBarPreference(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        minValue = a1.getInt(R.styleable.EditableSeekBar_minValue, DEFAULT_MIN_VALUE);
+        maxValue = a1.getInt(R.styleable.EditableSeekBar_maxValue, DEFAULT_MAX_VALUE);
 
-        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.EditableSeekBarPreference, 0, 0);
+        if (TypedArrayUtils.getBoolean(a2, R.styleable.EditableSeekBarPreference_useSimpleSummaryProvider,
+                R.styleable.EditableSeekBarPreference_useSimpleSummaryProvider, false)) {
+            setSummaryProvider(SimpleSummaryProvider.getInstance());
+        }
 
-        minVal = a.getInt(R.styleable.EditableSeekBarPreference_esbpMin, 0);
-        maxVal = a.getInt(R.styleable.EditableSeekBarPreference_esbpMax, 0);
+        a1.recycle();
+        a2.recycle();
 
         setDialogLayoutResource(R.layout.editable_seekbar_preference);
     }
 
-    @Override
-    protected void onDialogClosed(boolean positiveResult) {
-        if(positiveResult) {
-            // save new value
-            persistInt(value);
-        }
+    public EditableSeekBarPreference(Context context, AttributeSet attrs, int defStyleAttr) {
+        this(context, attrs, defStyleAttr, 0);
     }
 
-    @Override
-    protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
-        if(restorePersistedValue) {
-            value = this.getPersistedInt(DEFAULT_VALUE);
-        } else {
-            value = (int) defaultValue;
-            persistInt(value);
-        }
+    public EditableSeekBarPreference(Context context, AttributeSet attrs) {
+        this(context, attrs, TypedArrayUtils.getAttr(context, R.attr.editTextPreferenceStyle, android.R.attr.editTextPreferenceStyle));
+    }
+
+    public EditableSeekBarPreference(Context context) {
+        this(context, null);
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+        persistInt(value);
+        notifyChanged();
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public int getMinValue() {
+        return minValue;
+    }
+
+    public int getMaxValue() {
+        return maxValue;
     }
 
     @Override
@@ -52,29 +73,30 @@ public class EditableSeekBarPreference extends DialogPreference {
     }
 
     @Override
-    protected void onBindDialogView(View view) {
-        super.onBindDialogView(view);
-
-        EditableSeekBar seekBar = (EditableSeekBar) view.findViewById(R.id.seekBar);
-        if(seekBar != null) {
-            seekBar.setMinValue(minVal);
-            seekBar.setMaxValue(maxVal);
-            seekBar.setValue(value);
-            seekBar.setOnEditableSeekBarChangeListener(new EditableSeekBar.OnEditableSeekBarChangeListener() {
-                @Override public void onEditableSeekBarProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {}
-                @Override public void onStartTrackingTouch(SeekBar seekBar) {}
-                @Override public void onStopTrackingTouch(SeekBar seekBar) {}
-                @Override public void onEnteredValueTooHigh() {}
-                @Override public void onEnteredValueTooLow() {}
-                @Override
-                public void onEditableSeekBarValueChanged(int value) {
-                    EditableSeekBarPreference.this.value = value;
-                }
-            });
-        } else Log.wtf(getClass().getSimpleName(), "SeekBar was not found when Dialog was bound!");
+    protected void onSetInitialValue(@Nullable Object defaultValue) {
+        if (defaultValue == null) {
+            setValue(getPersistedInt(DEFAULT_VALUE));
+        } else {
+            setValue(getPersistedInt((Integer) defaultValue));
+        }
     }
 
-    public int getValue() {
-        return value;
+    public static final class SimpleSummaryProvider implements SummaryProvider<EditableSeekBarPreference> {
+
+        private static SimpleSummaryProvider provider;
+
+        private SimpleSummaryProvider() {}
+
+        public static SimpleSummaryProvider getInstance() {
+            if (provider == null) {
+                provider = new SimpleSummaryProvider();
+            }
+            return provider;
+        }
+
+        @Override
+        public CharSequence provideSummary(EditableSeekBarPreference preference) {
+            return String.valueOf(preference.getValue());
+        }
     }
 }

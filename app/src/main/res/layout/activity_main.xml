@@ -10,38 +10,43 @@
         android:id="@+id/esbExample1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:esbTitle="Example 1 with title"
-        app:esbMin="-100"
-        app:esbMax="-50" />
+        app:title="Example 1 with title"
+        app:minValue="-100"
+        app:maxValue="100" />
 
     <com.gregacucnik.editableseekbar.EditableSeekBar
         android:id="@+id/esbExample2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:esbTitleAppearance="@style/Texts"
-        app:esbTitle="Example 2 with title styling"
-        app:esbMax="200"
-        app:esbMin="-100"
-        app:esbValue="150" />
+        app:titleAppearance="@style/Texts"
+        app:title="Example 2 with title styling"
+        app:maxValue="5"
+        app:minValue="0"
+        app:value="2" />
 
     <com.gregacucnik.editableseekbar.EditableSeekBar
         android:id="@+id/esbExample3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:esbSelectAllOnFocus="false"
-        app:esbTitle="Example 3 with disabled select all on focus"
-        app:esbMin="50"
-        app:esbMax="100"
-        app:esbValue="3" />
+        app:selectAllOnFocus="false"
+        app:title="Example 3 with disabled select all on focus"
+        app:minValue="50"
+        app:maxValue="100"
+        app:value="3" />
 
     <com.gregacucnik.editableseekbar.EditableSeekBar
         android:id="@+id/esbExample4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:esbTitle="Example 4 with custom edit text width"
-        app:esbEditTextFontSize="24sp"
-        app:esbEditTextWidth="150dp"
-        app:esbMax="5000"
-        app:esbValue="1000" />
+        app:title="Example 4 with custom edit text width"
+        app:editTextFontSize="24sp"
+        app:editTextWidth="150dp"
+        app:maxValue="5000"
+        app:value="1000" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
