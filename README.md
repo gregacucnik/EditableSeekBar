@@ -13,29 +13,30 @@ Combination of SeekBar and EditText. Android 4.4+
 ```gradle
 repositories {
     // your other repos...
-    jcenter()
     maven { url "https://jitpack.io" }
 }
 
 dependencies {
     // your other deps...
-    implementation 'com.github.mc0239:EditableSeekBar:v1.3.1'
+    implementation 'com.github.mc0239:EditableSeekBar:3.0.0-rc1'
 }
 ```
-            
-2. Include EditableSeekBar widget in your layout
+
+## As a widget
+
+Include EditableSeekBar widget in your layout:
     
 ```xml
 <com.gregacucnik.editableseekbar.EditableSeekBar
-        android:id="@+id/esbExample"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:esbTitle="Example title"
-        app:esbMax="5000"
-        app:esbValue="1000" />
+    android:id="@+id/esbExample1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:title="Example 1 with title"
+    app:minValue="-100"
+    app:maxValue="100" />
 ```
 
-3. (Optional) Use `OnEditableSeekBarChangeListener` to get callbacks for any changes
+(Optional) Use `OnEditableSeekBarChangeListener` to get callbacks for any changes
  * `onEditableSeekBarProgressChanged(SeekBar seekBar, int progress, boolean fromUser)` Sent when seekbar is moving
  * `onStartTrackingTouch(SeekBar seekBar)` Seekbar moving started by user touch
  * `onStopTrackingTouch(SeekBar seekBar)` Seekbar moving finished by user touch (also onEditableSeekBarValueChanged sent)
@@ -43,39 +44,33 @@ dependencies {
  * `onEnteredValueTooLow()` Entered value is lower than minValue
  * `onEditableSeekBarValueChanged(int value)` Current value after change or when keyboard dismissed
 
-## Customization
+## As a preference (androidx)
 
- * `esbValue` Value for EditableSeekBar (must be in range)
- * `esbMax` Maximum value
- * `esbMin` Minimum value
- * `esbTitle` Hidden, if empty
- * `esbTitleAppearance` Custom Title TextView Appearance
- * `esbSelectAllOnFocus` Auto select EditText on touch (default: true)
- * `esbAnimateSeekBar` Animate SeekBar on value change (default: true)
- * `esbEditTextWidth` Custom EditText width (default: 50dp)
- * `esbEditTextFontSize` Custom EditText font size (default: 18sp)
- 
-# Using as a preference
-
-You can use EditableSeekBar as a preference on a PreferenceScreen
+Include EditableSeekBarPreference in your PreferenceScreen: 
 
 ```xml
 <com.gregacucnik.editableseekbar.EditableSeekBarPreference
-        android:key="preference_key"
-        android:defaultValue="20"
-        android:title="Preference title"
-        app:esbpMin="10"
-        app:esbpMax="120" />
+    android:key="preference_key"
+    android:defaultValue="20"
+    android:title="Preference title"
+    app:minValue="10"
+    app:maxValue="120"
+    app:useSimpleSummaryProvider="true" />
 ```
 
 ## Customization
 
-EditableSeekBarPreference has these customizations availiable: 
+ * `value` Value for EditableSeekBar (must be in range)
+ * (*) `maxValue` Maximum value
+ * (*) `minValue` Minimum value
+ * `title` Hidden, if empty
+ * `titleAppearance` Custom Title TextView Appearance
+ * `selectAllOnFocus` Auto select EditText on touch (default: true)
+ * `animateSeekBar` Animate SeekBar on value change (default: true)
+ * `editTextWidth` Custom EditText width (default: 50dp)
+ * `editTextFontSize` Custom EditText font size (default: 18sp)
 
- * `esbpMax` Maximum value
- * `esbpMin` Minimum value
-
-For value and title use preferences' existing values, e.g. `title` and `defaultValue`.
+Note: EditableSeekBarPreference can use only attributes marked with (*). It also uses `android:` prefix for `title` and `defaultValue`, just like built-in preferences do.
 
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-EditableSeekBar-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2888)
 
@@ -84,6 +79,7 @@ License
 The MIT License (MIT)
 
 Copyright (c) 2015 Grega Čučnik
+Copyright (c) 2020 Martin Čebular
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
