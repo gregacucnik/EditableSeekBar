@@ -5,8 +5,7 @@ import android.os.Bundle;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.gregacucnik.editableseekbar.EditableSeekBarPreference;
-import com.gregacucnik.editableseekbar.EditableSeekBarPreferenceDialog;
+import com.gregacucnik.editableseekbar.EditableSeekBarPreferenceDialogHandler;
 
 public class MyPreferenceFragment extends PreferenceFragmentCompat {
 
@@ -23,12 +22,8 @@ public class MyPreferenceFragment extends PreferenceFragmentCompat {
             return;
         }
 
-        if (preference instanceof EditableSeekBarPreference) {
-            final EditableSeekBarPreferenceDialog f = EditableSeekBarPreferenceDialog.newInstance(preference.getKey());
-            f.setTargetFragment(this, 0);
-            f.show(getParentFragmentManager(), FRAGMENT_MANAGER_TAG);
-
-        } else {
+        boolean handled = EditableSeekBarPreferenceDialogHandler.showDialog(this, preference, 0, FRAGMENT_MANAGER_TAG);
+        if (!handled) {
             super.onDisplayPreferenceDialog(preference);
         }
     }
