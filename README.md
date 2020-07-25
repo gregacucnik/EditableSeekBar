@@ -57,8 +57,22 @@ Include EditableSeekBarPreference in your PreferenceScreen:
     app:maxValue="120"
     app:useSimpleSummaryProvider="true" />
 ```
+Then, in the PreferenceFragment, override onDisplayPreferenceDialog to handle the EditableSeekBarDialog. You can use the `EditableSeekBarPreferenceDialogHandler.showDialog` method, which will return true, if the showDialog action was handled - in that case, you should not make a call to `super`:
 
-TODO: also requires overriding `onDisplayPreferenceDialog` in `PreferenceFragmentCompat` to display `EditableSeekBarPreferenceDialog`.
+```java
+@Override
+public void onDisplayPreferenceDialog(Preference preference) {
+    if (getParentFragmentManager().findFragmentByTag(FRAGMENT_MANAGER_TAG) != null) {
+        return;
+    }
+
+    boolean handled = EditableSeekBarPreferenceDialogHandler.showDialog(this, preference, 0, FRAGMENT_MANAGER_TAG);
+    if (!handled) {
+        // your other preference dialog handling, or call to super...
+        super.onDisplayPreferenceDialog(preference);
+    }
+}
+```
 
 ## Customization
 
