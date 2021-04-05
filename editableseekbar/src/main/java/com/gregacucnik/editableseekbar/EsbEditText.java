@@ -1,4 +1,4 @@
-package com.gregacucnik;
+package com.gregacucnik.editableseekbar;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -7,45 +7,35 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
-/**
- * Created by Grega on 15/12/15.
- */
-public class ESB_EditText extends EditText {
+import androidx.appcompat.widget.AppCompatEditText;
+
+public class EsbEditText extends AppCompatEditText {
 
     private OnEditTextListener mListener;
 
-    public interface OnEditTextListener{
-        void onEditTextKeyboardDismissed();
-        void onEditTextKeyboardDone();
-    }
-
-    public ESB_EditText(Context context) {
+    public EsbEditText(Context context) {
         super(context);
-
         init();
     }
 
-    public ESB_EditText(Context context, AttributeSet attrs) {
+    public EsbEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
-
         init();
     }
 
-    public ESB_EditText(Context context, AttributeSet attrs, int defStyleAttr) {
+    public EsbEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
         init();
     }
 
-    private void init(){
+    private void init() {
         setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-
-                    if(mListener != null)
+                    if(mListener != null) {
                         mListener.onEditTextKeyboardDone();
-
+                    }
                     return true;
                 }
                 return false;
@@ -53,8 +43,26 @@ public class ESB_EditText extends EditText {
         });
     }
 
-    public void setOnKeyboardDismissedListener(OnEditTextListener listener){
+    public void setOnKeyboardDismissedListener(OnEditTextListener listener) {
         this.mListener = listener;
+    }
+
+    public void setValue(Integer value) {
+        if (value == null) {
+            setText("");
+        } else {
+            setText(String.valueOf(value));
+        }
+    }
+
+    public void selectNone() {
+        // inversely to selectAll, this method de-selects text and moves
+        // cursor to the end.
+        if (getText() != null) {
+            setSelection(getText().length());
+        } else {
+            setSelection(0, 0);
+        }
     }
 
     @Override
@@ -68,6 +76,11 @@ public class ESB_EditText extends EditText {
         }
 
         return super.dispatchKeyEvent(event);
+    }
+
+    public interface OnEditTextListener{
+        void onEditTextKeyboardDismissed();
+        void onEditTextKeyboardDone();
     }
 
 }

@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <declare-styleable name="EditableSeekBar">
-        <attr name="esbTitleAppearance" format="reference" />
-        <attr name="esbMax" format="integer" />
-        <attr name="esbMin" format="integer" />
-        <attr name="esbValue" format="integer" />
-        <attr name="esbTitle" format="string" />
-        <attr name="esbSelectAllOnFocus" format="boolean" />
-        <attr name="esbAnimateSeekBar" format="boolean" />
-        <attr name="esbEditTextWidth" format="dimension" />
-        <attr name="esbEditTextFontSize" format="dimension" />
+        <attr name="maxValue" format="integer" />
+        <attr name="minValue" format="integer" />
+
+        <attr name="titleAppearance" format="reference" />
+        <attr name="selectAllOnFocus" format="boolean" />
+        <attr name="animateSeekBar" format="boolean" />
+        <attr name="editTextWidth" format="dimension" />
+        <attr name="editTextFontSize" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="EditableSeekBarView">
+        <!-- attributes specific to EditableSeekBar view itself -->
+        <attr name="title" format="string" />
+        <attr name="value" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="EditableSeekBarPreference">
+        <!-- attributes specific to EditableSeekBar preference -->
+        <attr name="useSimpleSummaryProvider" format="boolean" />
+    </declare-styleable>
+
 </resources>

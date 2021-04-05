@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="ComboBoxPreference example">
+
+        <com.gregacucnik.editableseekbar.EditableSeekBarPreference
+            android:key="preference_key"
+            android:defaultValue="20"
+            android:title="Preference title"
+            app:minValue="10"
+            app:maxValue="120"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
